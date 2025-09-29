@@ -1,3 +1,7 @@
+import sys, six
+sys.modules['kafka.vendor.six'] = six
+sys.modules['kafka.vendor.six.moves'] = six.moves
+
 import time, uuid, random
 import orjson
 from datetime import datetime
