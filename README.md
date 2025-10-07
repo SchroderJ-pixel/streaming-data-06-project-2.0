@@ -1,53 +1,80 @@
-# streaming-data-06-project
-Streaming Data: Mod 6 Project
+# streaming-data-07-project
+Streaming Data: Mod 7 Project
 
-**Course:** Streaming Data – Module 6  
-**Date:** September 29, 2025  
+**Course:** Streaming Data – Module 7  
+**Date:** October 7, 2025  
 **Author:** Justin Schroder  
 **GitHub:** [SchroderJ-pixel](https://github.com/SchroderJ-pixel) 
 
-# Live Workout Tracker (Kafka)
+---
 
-## What it does
-- Producer streams **JSON** workout set events (reps × weight) by exercise/muscle group.
-- Consumer computes **tonnage** per message, updates a per-group running total, appends a row to `processed_results.csv` (optional), and shows a **live bar chart**.
+# 🏋️‍♂️ Live Workout Tracker (Kafka)
 
-## Setup
+## What It Does
+This project simulates a live data streaming pipeline using **Apache Kafka**.  
+- The **producer** streams workout set data as JSON (reps × weight) by exercise/muscle group.  
+- The **consumer** computes total **training volume (tonnage)** in real time, maintains per-group totals.
+- A **chart consumer** provides a **live bar chart** of cumulative volume by muscle group.
+
+---
+
+## ⚙️ Quick Start
+
+If you just want to get it running fast:
 ```bash
+git clone https://github.com/SchroderJ-pixel/streaming-data-07-project
+cd streaming-data-07-project
+
 python -m venv .venv
-# Windows PowerShell
-. .venv/Scripts/Activate.ps1
-# or WSL/macOS
-# source .venv/bin/activate
+.\venv\Scripts\activate  # Windows 
+# or
+# source .venv/bin/activate    # WSL/macOS
 
 pip install -r requirements.txt
-Start Kafka (in WSL window)
-bash
-Copy code
-# Zookeeper
+
+# In WSL:
+cd ~/kafka_2.13-3.7.0
 bin/zookeeper-server-start.sh config/zookeeper.properties
-# Kafka broker (new terminal)
+
+# In a new WSL terminal:
+cd ~/kafka_2.13-3.7.0
 bin/kafka-server-start.sh config/server.properties
 
-# Create topic (only once)
+# Create Kafka topic (run once)
 bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic workout_volume --partitions 1 --replication-factor 1
 
 # (Optional) check topics
 bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
+---
+
+Make sure Zookeeper and Kafka are already running before starting these scripts.
 
 ## Run the app
 
 ### 1) Start producer
+#### First ensure venv is activated
+```bash 
+.\venv\Scripts\activate
 python -m producers.producer_workout
+```
 
 ### 2) Start consumer (logging version)
+#### First ensure venv is activated
+```bash 
+.\venv\Scripts\activate
 python -m consumers.consumer_volume
+```
 
 ### 3) Start chart consumer
+#### First ensure venv is activated
+```bash 
+.\venv\Scripts\activate
 python -m consumers.consumer_chart
+```
 
 ## Message Schema (example)
+```json
 {
   "ts": "2025-09-29T12:34:56.789012+00:00",
   "session_id": "a1b2c3d4",
@@ -56,6 +83,7 @@ python -m consumers.consumer_chart
   "reps": 10,
   "weight": 135
 }
+```
 
 ---
 
